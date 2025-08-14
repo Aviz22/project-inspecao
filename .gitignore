@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.Python
+env/
+venv/
+
+# Django-specific
+*.log
+*.sqlite3
+media/
+static/
+
+# IDEs
+.vscode/
+.idea/
+
+# Operating System
+.DS_Store
+Thumbs.db
+
+# Virtual Environments
+# Exclude a pasta do ambiente virtual.
+# Se o seu ambiente virtual se chama 'env', 'venv' ou algo diferente,
+# você deve garantir que ele esteja listado aqui.
+env/
+venv/
+
+# Secrets
+# Arquivos que contêm segredos, como chaves de API, senhas, etc.
+# Mantenha-os fora do controle de versão!
+# Exemplo: um arquivo 'secrets.py' ou 'local_settings.py'
+secrets.py
+local_settings.py
