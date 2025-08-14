@@ -1,0 +1,216 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Inspeção - Dashboard</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-clipboard-check"></i>
+                    <h1>Sistema de Inspeção</h1>
+                </div>
+                <nav class="nav">
+                    <ul>
+                        <li><a href="#dashboard" class="nav-link active">Dashboard</a></li>
+                        <li><a href="#dados" class="nav-link">Dados Brutos</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <div class="container">
+            <!-- Dashboard Section -->
+            <section id="dashboard" class="section active">
+                <div class="section-header">
+                    <h2>Dashboard de Inspeções</h2>
+                    <p>Visão geral dos dados de inspeção</p>
+                </div>
+
+                <!-- Loading Indicator -->
+                <div id="loading" class="loading">
+                    <div class="spinner"></div>
+                    <p>Carregando dados...</p>
+                </div>
+
+                <!-- Error Message -->
+                <div id="error" class="error-message" style="display: none;">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <p>Erro ao carregar os dados. Tente novamente.</p>
+                </div>
+
+                <!-- Stats Cards -->
+                <div class="stats-grid" id="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="total-funcionarios">-</h3>
+                            <p>Funcionários Inspecionados</p>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-user-tie"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="total-inspetores">-</h3>
+                            <p>Inspetores</p>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-file-contract"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="total-contratos">-</h3>
+                            <p>Contratos</p>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-briefcase"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="total-funcoes">-</h3>
+                            <p>Funções</p>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-user-cog"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="total-coordenadores">-</h3>
+                            <p>Coordenadores</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts Section -->
+                <div class="charts-section">
+                    <div class="chart-container">
+                        <div class="chart-header">
+                            <h3>Funcionários por Checklist</h3>
+                        </div>
+                        <div class="chart-wrapper">
+                            <canvas id="funcionarios-chart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="chart-container">
+                        <div class="chart-header">
+                            <h3>Inspetores por Checklist</h3>
+                        </div>
+                        <div class="chart-wrapper">
+                            <canvas id="inspetores-chart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="chart-container">
+                        <div class="chart-header">
+                            <h3>Contratos por Checklist</h3>
+                        </div>
+                        <div class="chart-wrapper">
+                            <canvas id="contratos-chart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="chart-container">
+                        <div class="chart-header">
+                            <h3>Distribuição Geral</h3>
+                        </div>
+                        <div class="chart-wrapper">
+                            <canvas id="distribuicao-chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Dados Brutos Section -->
+            <section id="dados" class="section">
+                <div class="section-header">
+                    <h2>Dados Brutos</h2>
+                    <p>Visualização completa dos dados de inspeção</p>
+                </div>
+
+                <!-- Table Controls -->
+                <div class="table-controls">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="search-input" placeholder="Buscar nos dados...">
+                    </div>
+                    <div class="table-actions">
+                        <button id="export-btn" class="btn btn-secondary">
+                            <i class="fas fa-download"></i>
+                            Exportar CSV
+                        </button>
+                        <button id="refresh-btn" class="btn btn-primary">
+                            <i class="fas fa-sync-alt"></i>
+                            Atualizar
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Data Table -->
+                <div class="table-container">
+                    <table id="dados-table" class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Código Checklist</th>
+                                <th>Matrícula Funcionário</th>
+                                <th>Matrícula Inspetor</th>
+                                <th>Departamento</th>
+                                <th>Função</th>
+                                <th>Coordenador</th>
+                            </tr>
+                        </thead>
+                        <tbody id="dados-tbody">
+                            <!-- Data will be populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination -->
+                <div class="pagination" id="pagination">
+                    <!-- Pagination will be populated by JavaScript -->
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>&copy; 2025 Sistema de Inspeção. Todos os direitos reservados.</p>
+                <div class="footer-links">
+                    <a href="#" class="footer-link">Suporte</a>
+                    <a href="#" class="footer-link">Documentação</a>
+                    <a href="#" class="footer-link">Contato</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+</body>
+</html>

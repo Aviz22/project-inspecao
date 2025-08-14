@@ -51,7 +51,7 @@ ROOT_URLCONF = 'inspetoria_projeto.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'inspetoria_app' / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -126,3 +126,8 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000", # Exemplo
     "http://127.0.0.1:8000",
 ]
+
+STATICFILES_DIRS = [
+    BASE_DIR / 'inspetoria_app' / 'static',
+]
+
